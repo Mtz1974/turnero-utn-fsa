@@ -47,10 +47,12 @@ Vite
 
 📦 Instalación
 
+
 1️⃣ Clonar el repositorio
 
 git clone https://github.com/TuUsuario/turnero-utn-fsa
 cd turnero-utn-fsa
+
 
 2️⃣ Instalar dependencias
 
@@ -60,7 +62,9 @@ composer install
 Frontend (Node)
 npm install
 
+
 3️⃣ Configurar entorno
+
 
 Copiar archivo de ejemplo:
 
@@ -72,7 +76,6 @@ Editar las variables más importantes:
 APP_NAME="Turnero En Vivo UTN-FSA"
 APP_ENV=local
 APP_KEY=
-
 APP_DEBUG=true
 APP_URL=http://127.0.0.1:8000
 

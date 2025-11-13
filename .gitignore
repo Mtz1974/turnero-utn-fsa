@@ -1,0 +1,41 @@
+# --- Laravel / PHP ---
+/vendor/
+/bootstrap/cache/
+/storage/*.key
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# --- Entorno ---
+/.env
+/.env.*
+!.env.example
+
+# --- Base de datos local ---
+/database/*.sqlite
+/database/*.db
+/database/*.db-wal
+/database/*.db-shm
+
+# --- Node / Vite ---
+/node_modules/
+/public/build/
+/public/hot
+/public/storage
+
+npm-debug.log
+yarn-error.log
+pnpm-debug.log
+
+# --- IDE / SO ---
+/.idea/
+/.vscode/
+/nbproject/
+
+.DS_Store
+Thumbs.db
+
+# --- Otros ---
+/composer.lock
+/package-lock.json

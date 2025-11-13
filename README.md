@@ -55,26 +55,27 @@ Aplicación web que permite:
 
 ```bash
 git clone https://github.com/TuUsuario/turnero-utn-fsa
+
 cd turnero-utn-fsa
+
 2️⃣ Instalar dependencias
+
 Backend (Composer)
-bash
-Copiar código
+
 composer install
+
 Frontend (Node)
-bash
-Copiar código
+
 npm install
+
 3️⃣ Configurar entorno
+
 Copiar archivo de ejemplo:
 
-bash
-Copiar código
 cp .env.example .env
 Editar las variables principales del .env:
 
-env
-Copiar código
+
 APP_NAME="Turnero En Vivo UTN-FSA"
 APP_ENV=local
 APP_DEBUG=true
@@ -93,26 +94,25 @@ PUSHER_HOST=
 PUSHER_PORT=443
 PUSHER_SCHEME=https
 PUSHER_APP_USE_TLS=true
+
 📌 Si usás SQLite, asegurate de crear el archivo:
 
-bash
-Copiar código
 mkdir -p database
 touch database/database.sqlite
+
 4️⃣ Generar Key y migraciones
-bash
-Copiar código
+
 php artisan key:generate
 php artisan migrate --seed
+
 5️⃣ Compilar frontend
-bash
-Copiar código
+
 npm run dev
+
 Esto activa Vite, compila Tailwind y Livewire y recarga todo en tiempo real.
 
 6️⃣ Iniciar el servidor Laravel
-bash
-Copiar código
+
 php artisan serve
 Acceder en:
 

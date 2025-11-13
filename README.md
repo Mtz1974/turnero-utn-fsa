@@ -119,8 +119,11 @@ Acceder en:
 🧩 Estructura de módulos
 
 /kiosco → Emisión de turnos
+
 /puesto → Panel de agentes para llamar/atender
+
 /pantalla → Visualización tipo TV con actualizaciones en vivo
+
 
 📸 Vistas del sistema
 

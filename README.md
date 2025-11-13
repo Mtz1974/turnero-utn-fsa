@@ -1,81 +1,82 @@
-🟦 Turnero En Vivo — UTN FSA
+# 🟦 Turnero En Vivo — UTN FSA
 
-Sistema de turnos en tiempo real desarrollado con Laravel + Livewire + Tailwind + Pusher
+Sistema de gestión de turnos en tiempo real desarrollado con **Laravel 12 + Livewire 3 + Tailwind CSS + Pusher**.
 
-🚀 Descripción general
+---
 
-● Proyecto web desarrollado en Laravel 12, Livewire 3 y Tailwind CSS 3, que permite:
+## 🚀 Descripción general
 
-• Generar turnos desde el kiosco
-• Gestionarlos desde un puesto (llamar, atender, marcar ausente, cerrar turno)
-• Visualizarlos en una pantalla tipo TV en tiempo real
-• Reproducir un sonido (“ding.mp3”) cada vez que se llama a un turno
-• Integración con Pusher + Laravel Echo para actualizaciones instantáneas
-• Modo claro/oscuro en la aplicación
-• Base de datos lista para usar con SQLite o MySQL
+Aplicación web que permite:
 
-✨ Características principales
+- 🏷️ **Generar turnos** desde un kiosco  
+- 👨‍💼 **Gestionarlos desde un puesto** (llamar, re-llamar, atender, marcar ausente, cerrar)  
+- 📺 **Mostrar turnos en una pantalla tipo TV**, con actualizaciones en tiempo real  
+- 🔊 **Reproducir un sonido "ding.mp3"** cada vez que se llama a un turno  
+- 🌗 **Modo oscuro / claro**  
+- ⚡ **Integración con Pusher + Laravel Echo**  
+- 🗄️ Base de datos compatible con **SQLite o MySQL**
 
-🖥️ Interfaz moderna
+---
 
-Diseño limpio y responsivo con Tailwind
-Modo oscuro / claro
-Pantalla tipo TV profesional como las de bancos/organismos
+## ✨ Características principales
 
-🎧 Tiempo real
+### 🖥️ Interfaz moderna  
+- Diseño profesional y responsivo con Tailwind  
+- Modo oscuro / claro integrado  
+- UI tipo panel corporativo  
 
-Actualización automática en la pantalla con Pusher
-Sonido “ding” al llamar un turno
-Eventos Livewire totalmente integrados
+### 🎧 Tiempo real  
+- Actualización automática de la pantalla con Pusher  
+- Sonido al llamar turnos  
+- Eventos Livewire totalmente integrados  
 
-🏷️ Gestión completa
+### 🏷️ Gestión completa  
+- `/kiosco` — Emisión de turnos  
+- `/puesto` — Panel del agente para gestionar  
+- `/pantalla` — Pantalla TV con últimos llamados + cola  
 
-Kiosco: emisión de turnos
-Puesto: llamar, re-llamar, atender, marcar ausente, cerrar
-Prioritarios
-Vista TV mostrando últimos llamados y cola de espera
+---
 
-⚙️ Tecnología
+## ⚙️ Tecnologías
 
-Laravel 12
-PHP 8.2+
-Livewire 3
-Tailwind CSS
-Laravel Echo + Pusher
-SQLite / MySQL
-Vite
+- **Laravel 12**  
+- **PHP 8.2+**  
+- **Livewire 3**  
+- **Tailwind CSS 3**  
+- **Laravel Echo + Pusher**  
+- **SQLite / MySQL**  
+- **Vite**
 
-📦 Instalación
+---
 
+## 📦 Instalación
 
-1️⃣ Clonar el repositorio
+### 1️⃣ Clonar el repositorio
 
+```bash
 git clone https://github.com/TuUsuario/turnero-utn-fsa
 cd turnero-utn-fsa
-
-
 2️⃣ Instalar dependencias
-
-PHP (Composer)
+Backend (Composer)
+bash
+Copiar código
 composer install
-
 Frontend (Node)
+bash
+Copiar código
 npm install
-
-
 3️⃣ Configurar entorno
-
-
 Copiar archivo de ejemplo:
 
+bash
+Copiar código
 cp .env.example .env
+Editar las variables principales del .env:
 
-
-Editar las variables más importantes:
-
+env
+Copiar código
 APP_NAME="Turnero En Vivo UTN-FSA"
 APP_ENV=local
-APP_KEY=
 APP_DEBUG=true
 APP_URL=http://127.0.0.1:8000
 
@@ -92,65 +93,80 @@ PUSHER_HOST=
 PUSHER_PORT=443
 PUSHER_SCHEME=https
 PUSHER_APP_USE_TLS=true
-
-
 📌 Si usás SQLite, asegurate de crear el archivo:
 
-database/database.sqlite
-
-4️⃣ Generar key y migrar base
+bash
+Copiar código
+mkdir -p database
+touch database/database.sqlite
+4️⃣ Generar Key y migraciones
+bash
+Copiar código
 php artisan key:generate
 php artisan migrate --seed
-
 5️⃣ Compilar frontend
+bash
+Copiar código
 npm run dev
-
-
-• Esto activa Vite, compila Tailwind y Livewire, y recarga en tiempo real.
+Esto activa Vite, compila Tailwind y Livewire y recarga todo en tiempo real.
 
 6️⃣ Iniciar el servidor Laravel
+bash
+Copiar código
 php artisan serve
-
-
 Acceder en:
 
 👉 http://127.0.0.1:8000
 
 🧩 Estructura de módulos
-
-/kiosco → Emisión de turnos
-
-/puesto → Panel de agentes para llamar/atender
-
-/pantalla → Visualización tipo TV con actualizaciones en vivo
-
+Ruta	Función
+/kiosco	Emisión de turnos
+/puesto	Gestión por agentes
+/pantalla	Visualización TV en tiempo real
 
 📸 Vistas del sistema
+🟦 Pantalla TV
+Últimos turnos llamados
 
-Vista	                                                 Descripción
-🟦 Pantalla TV	            Muestra últimos llamados, turnos en cola e imagen corporativa
-🔵 Puesto	                El agente llama, atiende, re-llama o finaliza turnos
-🟩 Kiosco                 	Selección de servicio y emisión de turnos
-📡 Tiempo real con Pusher
+Cola de espera
 
-Cada vez que un puesto llama a un turno:
+Imagen corporativa
+
+Actualización automática vía Pusher
+
+🔵 Puesto
+Agente llama, atiende, re-llama o finaliza turnos
+
+🟩 Kiosco
+Selección de servicio
+
+Emisión instantánea del turno
+
+🔊 Funcionamiento del sonido
+Cada vez que un puesto llama un turno:
 
 Se dispara evento TurnoLlamado
-La pantalla lo recibe mediante Laravel Echo
-Se actualiza la UI en tiempo real
-Se reproduce el sonido ding.mp3
+
+/pantalla lo recibe vía Laravel Echo + Pusher
+
+La UI se actualiza automáticamente
+
+Se reproduce "ding.mp3"
 
 👨‍💻 Autor
-
-Desarrollado en el marco de la Tecnicatura Universitaria en Programación (UTN-FSA).
+Proyecto desarrollado como parte de la Tecnicatura Universitaria en Programación (UTN-FSA).
 
 ✔️ Listo para usar y presentar
+Este README está:
 
+🔹 Muy legible
 
-Este README ya está optimizado para GitHub:
+🔹 Optimizado para GitHub
 
-Con estilos
-Emojis
-Secciones ordenadas
-Código legible
-Instrucciones claras para cualquier profesor o usuario
+🔹 Bien estructurado
+
+🔹 Con emojis y secciones claras
+
+🔹 Con instrucciones completas
+
+¡Ideal para entregar a profesores, subir a portfolio o presentar en una entrevista!

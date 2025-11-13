@@ -1,46 +1,93 @@
-🎫 Turnero En Vivo — UTN-FSA
+🟦 Turnero En Vivo — UTN FSA
 
-Sistema web desarrollado en Laravel 12 + Livewire 3 + Tailwind CSS + Pusher, que permite gestionar y visualizar turnos en tiempo real para un kiosco o mesa de atención.
+Sistema de turnos en tiempo real desarrollado con Laravel + Livewire + Tailwind + Pusher
 
-🚀 Características principales
+🚀 Descripción general
 
-✅ Interfaz profesional, adaptable a modo claro/oscuro.
-✅ Panel del puesto para llamar, atender, cerrar o marcar ausentes.
-✅ Pantalla TV con actualizaciones en tiempo real vía Pusher/Echo.
-✅ Sonido de aviso (ding.mp3) cuando se llama a un nuevo turno.
-✅ Integración con SQLite o MySQL según preferencia.
-✅ Código modular con componentes Livewire organizados.
+Proyecto web desarrollado en Laravel 12, Livewire 3 y Tailwind CSS 3, que permite:
 
-🧰 Tecnologías utilizadas
-Componente	Versión	Descripción
-Laravel	12.x	Framework backend principal
-PHP	8.2+	Lenguaje de backend
-Livewire	3.x	Interactividad en tiempo real sin JS personalizado
-TailwindCSS	3.x	Estilos responsive y minimalistas
-Vite	—	Compilador de assets
-Pusher	—	Comunicación en tiempo real para eventos de turnos
-SQLite/MySQL	—	Base de datos configurable en .env
-⚙️ Instalación y configuración
+Generar turnos desde el kiosco
+
+Gestionarlos desde un puesto (llamar, atender, marcar ausente, cerrar turno)
+
+Visualizarlos en una pantalla tipo TV en tiempo real
+
+Reproducir un sonido (“ding.mp3”) cada vez que se llama a un turno
+
+Integración con Pusher + Laravel Echo para actualizaciones instantáneas
+
+Modo claro/oscuro en toda la aplicación
+
+Base de datos lista para usar con SQLite o MySQL
+
+✨ Características principales
+🖥️ Interfaz moderna
+
+Diseño limpio y responsivo con Tailwind
+
+Modo oscuro / claro
+
+Pantalla tipo TV profesional como las de bancos/organismos
+
+🎧 Tiempo real
+
+Actualización automática en la pantalla con Pusher
+
+Sonido “ding” al llamar un turno
+
+Eventos Livewire totalmente integrados
+
+🏷️ Gestión completa
+
+Kiosco: emisión de turnos
+
+Puesto: llamar, re-llamar, atender, marcar ausente, cerrar
+
+Prioritarios
+
+Vista TV mostrando últimos llamados y cola de espera
+
+⚙️ Tecnología
+
+Laravel 12
+
+PHP 8.2+
+
+Livewire 3
+
+Tailwind CSS
+
+Laravel Echo + Pusher
+
+SQLite / MySQL
+
+Vite
+
+📦 Instalación
 1️⃣ Clonar el repositorio
-git clone https://github.com/TuUsuarioGitHub/turnero-utn-fsa.git
+git clone https://github.com/TuUsuario/turnero-utn-fsa
 cd turnero-utn-fsa
 
 2️⃣ Instalar dependencias
+PHP (Composer)
 composer install
+
+Frontend (Node)
 npm install
 
 3️⃣ Configurar entorno
 
-Copiá el archivo de ejemplo:
+Copiar archivo de ejemplo:
 
 cp .env.example .env
 
 
-Y completá las variables más importantes dentro del .env:
+Editar las variables más importantes:
 
 APP_NAME="Turnero En Vivo UTN-FSA"
 APP_ENV=local
 APP_KEY=
+
 APP_DEBUG=true
 APP_URL=http://127.0.0.1:8000
 
@@ -59,30 +106,77 @@ PUSHER_SCHEME=https
 PUSHER_APP_USE_TLS=true
 
 
-Luego ejecutá:
+📌 Si usás SQLite, asegurate de crear el archivo:
 
+database/database.sqlite
+
+4️⃣ Generar key y migrar base
 php artisan key:generate
 php artisan migrate --seed
 
-
-(Si usás SQLite, asegurate de tener el archivo database/database.sqlite creado manualmente).
-
-4️⃣ Compilar el frontend
+5️⃣ Compilar frontend
 npm run dev
 
 
-Esto activa Vite y carga los assets de Tailwind, Livewire y el tema oscuro.
+Esto activa Vite, compila Tailwind y Livewire, y recarga en tiempo real.
 
-5️⃣ Levantar el servidor
+6️⃣ Iniciar el servidor Laravel
 php artisan serve
 
 
-Accedé a tu aplicación en:
+Acceder en:
 
 👉 http://127.0.0.1:8000
 
-🎥 Vista de componentes
-Módulo	Ruta	Descripción
-/kiosco	Interfaz para clientes que solicitan turnos	
-/puesto	Panel del puesto con botones de control	
-/pantalla	Visualización tipo TV con turnos y avisos	
+🧩 Estructura de módulos
+
+/kiosco → Emisión de turnos
+
+/puesto → Panel de agentes para llamar/atender
+
+/pantalla → Visualización tipo TV con actualizaciones en vivo
+
+📸 Vistas del sistema
+Vista	Descripción
+🟦 Pantalla TV	Muestra últimos llamados, turnos en cola e imagen corporativa
+🔵 Puesto	El agente llama, atiende, re-llama o finaliza turnos
+🟩 Kiosco	Selección de servicio y emisión de turnos
+📡 Tiempo real con Pusher
+
+Cada vez que un puesto llama a un turno:
+
+Se dispara evento TurnoLlamado
+
+La pantalla lo recibe mediante Laravel Echo
+
+Se actualiza la UI en tiempo real
+
+Se reproduce el sonido ding.mp3
+
+🛠️ Mejoras futuras (opcional)
+
+Múltiples puestos simultáneos
+
+Reportes y estadísticas de atención
+
+Módulo de administración de servicios y agentes
+
+Exportación PDF/Excel
+
+👨‍💻 Autor
+
+Desarrollado en el marco de la Tecnicatura Universitaria en Programación (UTN-FSA).
+
+✔️ Listo para usar y presentar
+
+Este README ya está optimizado para GitHub:
+
+Con estilos
+
+Emojis
+
+Secciones ordenadas
+
+Código legible
+
+Instrucciones claras para cualquier profesor o usuario

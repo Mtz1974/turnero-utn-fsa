@@ -4,71 +4,56 @@ Sistema de turnos en tiempo real desarrollado con Laravel + Livewire + Tailwind 
 
 🚀 Descripción general
 
-Proyecto web desarrollado en Laravel 12, Livewire 3 y Tailwind CSS 3, que permite:
+● Proyecto web desarrollado en Laravel 12, Livewire 3 y Tailwind CSS 3, que permite:
 
-Generar turnos desde el kiosco
-
-Gestionarlos desde un puesto (llamar, atender, marcar ausente, cerrar turno)
-
-Visualizarlos en una pantalla tipo TV en tiempo real
-
-Reproducir un sonido (“ding.mp3”) cada vez que se llama a un turno
-
-Integración con Pusher + Laravel Echo para actualizaciones instantáneas
-
-Modo claro/oscuro en toda la aplicación
-
-Base de datos lista para usar con SQLite o MySQL
+• Generar turnos desde el kiosco
+• Gestionarlos desde un puesto (llamar, atender, marcar ausente, cerrar turno)
+• Visualizarlos en una pantalla tipo TV en tiempo real
+• Reproducir un sonido (“ding.mp3”) cada vez que se llama a un turno
+• Integración con Pusher + Laravel Echo para actualizaciones instantáneas
+• Modo claro/oscuro en la aplicación
+• Base de datos lista para usar con SQLite o MySQL
 
 ✨ Características principales
+
 🖥️ Interfaz moderna
 
 Diseño limpio y responsivo con Tailwind
-
 Modo oscuro / claro
-
 Pantalla tipo TV profesional como las de bancos/organismos
 
 🎧 Tiempo real
 
 Actualización automática en la pantalla con Pusher
-
 Sonido “ding” al llamar un turno
-
 Eventos Livewire totalmente integrados
 
 🏷️ Gestión completa
 
 Kiosco: emisión de turnos
-
 Puesto: llamar, re-llamar, atender, marcar ausente, cerrar
-
 Prioritarios
-
 Vista TV mostrando últimos llamados y cola de espera
 
 ⚙️ Tecnología
 
 Laravel 12
-
 PHP 8.2+
-
 Livewire 3
-
 Tailwind CSS
-
 Laravel Echo + Pusher
-
 SQLite / MySQL
-
 Vite
 
 📦 Instalación
+
 1️⃣ Clonar el repositorio
+
 git clone https://github.com/TuUsuario/turnero-utn-fsa
 cd turnero-utn-fsa
 
 2️⃣ Instalar dependencias
+
 PHP (Composer)
 composer install
 
@@ -118,7 +103,7 @@ php artisan migrate --seed
 npm run dev
 
 
-Esto activa Vite, compila Tailwind y Livewire, y recarga en tiempo real.
+• Esto activa Vite, compila Tailwind y Livewire, y recarga en tiempo real.
 
 6️⃣ Iniciar el servidor Laravel
 php artisan serve
@@ -131,37 +116,23 @@ Acceder en:
 🧩 Estructura de módulos
 
 /kiosco → Emisión de turnos
-
 /puesto → Panel de agentes para llamar/atender
-
 /pantalla → Visualización tipo TV con actualizaciones en vivo
 
 📸 Vistas del sistema
-Vista	Descripción
-🟦 Pantalla TV	Muestra últimos llamados, turnos en cola e imagen corporativa
-🔵 Puesto	El agente llama, atiende, re-llama o finaliza turnos
-🟩 Kiosco	Selección de servicio y emisión de turnos
+
+Vista	                                                 Descripción
+🟦 Pantalla TV	            Muestra últimos llamados, turnos en cola e imagen corporativa
+🔵 Puesto	                El agente llama, atiende, re-llama o finaliza turnos
+🟩 Kiosco                 	Selección de servicio y emisión de turnos
 📡 Tiempo real con Pusher
 
 Cada vez que un puesto llama a un turno:
 
 Se dispara evento TurnoLlamado
-
 La pantalla lo recibe mediante Laravel Echo
-
 Se actualiza la UI en tiempo real
-
 Se reproduce el sonido ding.mp3
-
-🛠️ Mejoras futuras (opcional)
-
-Múltiples puestos simultáneos
-
-Reportes y estadísticas de atención
-
-Módulo de administración de servicios y agentes
-
-Exportación PDF/Excel
 
 👨‍💻 Autor
 
@@ -169,14 +140,11 @@ Desarrollado en el marco de la Tecnicatura Universitaria en Programación (UTN-F
 
 ✔️ Listo para usar y presentar
 
+
 Este README ya está optimizado para GitHub:
 
 Con estilos
-
 Emojis
-
 Secciones ordenadas
-
 Código legible
-
 Instrucciones claras para cualquier profesor o usuario

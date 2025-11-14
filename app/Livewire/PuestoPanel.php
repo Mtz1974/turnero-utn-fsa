@@ -5,106 +5,121 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Ticket;
+use App\Models\Puesto;
 use Illuminate\Support\Carbon;
-use App\Events\TurnoLlamado;   // 👈 nuevo: evento para websockets
 
-#[Layout('layouts.app')] // usamos el layout con navbar para usuarios logueados
+#[Layout('layouts.app')]
 class PuestoPanel extends Component
 {
-    public ?Ticket $ticket = null;
+    /** Turno que el agente está trabajando ahora (o el último llamado) */
+    public ?Ticket $ticketActual = null;
+
+    /** Cola completa de turnos en espera */
+    public $cola = [];
+
+    /** Lista de módulos disponibles (1..5) */
+    public $puestos = [];
 
     public function mount(): void
     {
-        // Si hay algún ticket "llamado" o "atendiendo" recientemente, lo mostramos (opcional)
-        $this->ticket = Ticket::whereIn('estado', ['llamado', 'atendiendo'])
-            ->latest('llamado_at')
-            ->first();
+        // Podés traerlos de la tabla puestos, o generar 1..5
+        $this->puestos = Puesto::orderBy('id')->get();
+
+        $this->refrescarDatos();
     }
 
-    public function llamarSiguiente(): void
+    /** Refresca turno actual + cola de espera */
+    public function refrescarDatos(): void
     {
-        // Próximo en espera: primero prioritarios, luego por id
-        $sig = Ticket::where('estado', 'en_espera')
-            ->orderByDesc('prioritario')
-            ->orderBy('id')
+        $this->ticketActual = Ticket::whereIn('estado', ['llamado', 'atendiendo'])
+            ->latest('llamado_at')
             ->first();
 
-        if (!$sig) {
-            $this->ticket = null;
-            $this->dispatch('toast', ['type' => 'info', 'msg' => 'No hay turnos en espera.']);
+        $this->cola = Ticket::where('estado', 'en_espera')
+            ->orderByDesc('prioritario')
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * Asigna un módulo a un ticket en espera y lo marca como LLAMADO.
+     */
+    public function asignarYllamar(int $ticketId, int $puestoId): void
+    {
+        $ticket = Ticket::find($ticketId);
+
+        if (!$ticket || $ticket->estado !== 'en_espera') {
             return;
         }
 
-        $sig->estado = 'llamado';
-        $sig->llamado_at = Carbon::now();
-        $sig->save();
+        $ticket->estado     = 'llamado';
+        $ticket->puesto_id  = $puestoId;
+        $ticket->llamado_at = Carbon::now();
+        $ticket->save();
 
-        $this->ticket = $sig;
+        $this->ticketActual = $ticket;
 
-        // 🔔 Broadcast para /pantalla (Echo): reproducir sonido y refrescar
-        event(new TurnoLlamado([
-            'id'     => $sig->id,
-            'codigo' => ($sig->servicio?->codigo ?? '') . str_pad($sig->numero, 3, '0', STR_PAD_LEFT),
-            'serv'   => $sig->servicio?->codigo,
-            'modulo' => $sig->puesto_id ?? null,  // ajustá si usás otro campo para el “módulo/agente”
-            'prio'   => (bool) $sig->prioritario,
-            'at'     => $sig->llamado_at?->toISOString(),
-        ]));
+        // Refrescar cola en pantalla
+        $this->refrescarDatos();
 
-        // Notificar también dentro del propio Livewire (si lo usás)
-        $this->dispatch('turno-llamado', id: $sig->id);
+        // Notificar a /pantalla
+        $this->dispatch('turno-llamado', id: $ticket->id);
     }
 
     public function comenzar(): void
     {
-        if (!$this->ticket) return;
+        if (!$this->ticketActual) {
+            return;
+        }
 
-        $this->ticket->estado = 'atendiendo';
-        $this->ticket->save();
+        $this->ticketActual->estado = 'atendiendo';
+        $this->ticketActual->save();
 
-        $this->dispatch('turno-en-atencion', id: $this->ticket->id);
+        $this->dispatch('turno-en-atencion', id: $this->ticketActual->id);
+
+        $this->refrescarDatos();
     }
 
     public function rellamar(): void
     {
-        if (!$this->ticket) return;
+        if (!$this->ticketActual) {
+            return;
+        }
 
-        $this->ticket->llamado_at = Carbon::now();
-        $this->ticket->save();
+        $this->ticketActual->llamado_at = Carbon::now();
+        $this->ticketActual->save();
 
-        // 🔔 Broadcast otra vez (re-llamado)
-        event(new TurnoLlamado([
-            'id'     => $this->ticket->id,
-            'codigo' => ($this->ticket->servicio?->codigo ?? '') . str_pad($this->ticket->numero, 3, '0', STR_PAD_LEFT),
-            'serv'   => $this->ticket->servicio?->codigo,
-            'modulo' => $this->ticket->puesto_id ?? null,
-            'prio'   => (bool) $this->ticket->prioritario,
-            'at'     => $this->ticket->llamado_at?->toISOString(),
-        ]));
-
-        $this->dispatch('turno-llamado', id: $this->ticket->id);
+        $this->dispatch('turno-llamado', id: $this->ticketActual->id);
     }
 
     public function cerrar(): void
     {
-        if (!$this->ticket) return;
+        if (!$this->ticketActual) {
+            return;
+        }
 
-        $this->ticket->estado = 'atendido';
-        $this->ticket->save();
+        $this->ticketActual->estado = 'atendido';
+        $this->ticketActual->save();
 
-        $this->dispatch('turno-cerrado', id: $this->ticket->id);
-        $this->ticket = null;
+        $this->dispatch('turno-cerrado', id: $this->ticketActual->id);
+        $this->ticketActual = null;
+
+        $this->refrescarDatos();
     }
 
     public function ausente(): void
     {
-        if (!$this->ticket) return;
+        if (!$this->ticketActual) {
+            return;
+        }
 
-        $this->ticket->estado = 'ausente';
-        $this->ticket->save();
+        $this->ticketActual->estado = 'ausente';
+        $this->ticketActual->save();
 
-        $this->dispatch('turno-ausente', id: $this->ticket->id);
-        $this->ticket = null;
+        $this->dispatch('turno-ausente', id: $this->ticketActual->id);
+        $this->ticketActual = null;
+
+        $this->refrescarDatos();
     }
 
     public function render()

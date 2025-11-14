@@ -46,6 +46,21 @@ class TurneroSeeder extends Seeder
                 'role' => 'admin',
             ]
         );
+// --- Puestos (módulos) de ejemplo ---
+    Puesto::updateOrCreate(
+        ['codigo' => '1'],
+        ['nombre' => 'Módulo 1']
+    );
+
+    Puesto::updateOrCreate(
+        ['codigo' => '2'],
+        ['nombre' => 'Módulo 2']
+    );
+
+    Puesto::updateOrCreate(
+        ['codigo' => '3'],
+        ['nombre' => 'Módulo 3']
+    );
 
         User::updateOrCreate(
             ['email' => 'agente@demo.com'],

@@ -10,10 +10,8 @@ return new class extends Migration
     {
         Schema::create('puestos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre'); // "Módulo 1", "Caja 2"
-            $table->foreignId('servicio_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('agente_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->boolean('activo')->default(true);
+            $table->string('nombre');   // Ej: "Módulo 1"
+            $table->string('codigo');   // Ej: "1" (para mostrar en pantalla)
             $table->timestamps();
         });
     }

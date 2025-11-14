@@ -2,10 +2,20 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Puesto extends Model
 {
-    protected $fillable = ['nombre','servicio_id','agente_id','activo'];
-    public function servicio(){ return $this->belongsTo(Servicio::class); }
+    use HasFactory;
+
+    protected $fillable = [
+        'nombre',
+        'codigo',
+    ];
+
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
 }

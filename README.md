@@ -1,53 +1,50 @@
 🟦 Turnero En Vivo — UTN FSA
 
-Sistema de turnos en tiempo real desarrollado con Laravel 12, Livewire 3, Tailwind CSS, y WebSockets usando Laravel Reverb + Laravel Echo.
+Sistema de turnos en tiempo real desarrollado con Laravel 12, Livewire 3, Tailwind CSS, y WebSockets reales usando Laravel Reverb + Laravel Echo.
 
-Proyecto académico para la Tecnicatura Universitaria en Programación (UTN-FSA), pensado para simular un turnero tipo banco / organismo público, con flujo completo de kiosco → puesto → pantalla TV.
+Proyecto académico realizado en la Tecnicatura Universitaria en Programación – UTN Facultad Regional Formosa, simulando un sistema de turnos similar al de bancos, hospitales u organismos públicos.
 
-🚀 Descripción general
+⭐ Descripción general
 
-Este sistema permite:
+El sistema permite:
 
 🧾 Emitir turnos desde un kiosco (sin autenticación)
 
 🎛️ Gestionar turnos desde un panel de puesto
+(llamar, atender, re-llamar, marcar ausente, cerrar)
 
-Llamar turno
+🧩 Asignar módulo (Módulo 1 al 5)
 
-Asignar módulo (Módulo 1–5)
+📺 Mostrar turnos en una pantalla tipo TV en tiempo real
 
-Re-llamar
+🔔 Reproducir sonido "ding.mp3" al llamar un turno
 
-Marcar ausente
+🌐 Actualización instantánea mediante WebSockets
 
-Cerrar (atendido)
+🌗 Modo claro / oscuro en toda la aplicación
 
-📺 Visualizar turnos en pantalla tipo TV, en tiempo real
+📌 Módulos principales
 
-🔔 Ejecutar un sonido “ding” al llamar un turno
+/ — Welcome (explicación del sistema + accesos rápidos)
 
-🌐 Usar WebSockets reales mediante Laravel Reverb
+/kiosco — Emisión de turnos por parte del público
 
-🌗 Cambiar entre modo claro / oscuro
+/puesto — Panel de agente/admin (login requerido)
 
-🧩 Módulos principales
-Ruta	Descripción
-/	Welcome con explicación y accesos directos
-/kiosco	Emisión de turnos por parte del usuario
-/puesto	Panel de agente/admin para gestionar turnos
-/pantalla	Pantalla TV con actualizaciones en vivo
-🧱 Tecnologías usadas
+/pantalla — Pantalla tipo TV para visualizar turnos en tiempo real
+
+🛠️ Tecnologías utilizadas
 Backend
 
 PHP 8.2+
 
 Laravel 12
 
-Laravel Reverb (WebSockets nativos)
-
-Laravel Echo (cliente WebSocket)
-
 Livewire 3
+
+Laravel Reverb (WebSockets)
+
+Laravel Echo
 
 Frontend
 
@@ -55,121 +52,115 @@ Tailwind CSS 3
 
 Vite
 
-Alpine.js (modo Dark/Light)
+Alpine.js
 
 Tiempo real
 
-Eventos broadcast (TurnoLlamado)
+Broadcasting de eventos con ShouldBroadcast
 
-Canales públicos con Reverb
+Canal público pantalla
 
-Echo escuchando en pantalla
+Listener en Echo: .listen('.turno.llamado')
 
 Base de datos
 
 SQLite por defecto (database/database.sqlite)
 
-Se puede usar MySQL sin cambios en el código
+Compatible con MySQL/MariaDB
 
-🗃 Modelo de datos (simplificado)
+🗂 Modelo de datos
 users
 
-id, name, email, password
+id
 
-role: admin / agente / publico
+name
+
+email
+
+password
+
+role (admin, agente, publico)
 
 servicios
 
-id, nombre, codigo
+id
 
-Ej.: ME → Mesa de Entradas, AD → Administración
+nombre
+
+codigo
 
 puestos
 
-id, codigo, nombre
+id
 
-Ej.: “Módulo 1”, “Módulo 2”, etc.
+codigo
+
+nombre
+(Ej.: Módulo 1, Módulo 2, …)
 
 tickets
 
-servicio_id → pertenece a un Servicio
+id
 
-numero → correlativo
+servicio_id
 
-prioritario → sí/no
+numero
 
-estado → en_espera, llamado, atendiendo, atendido, ausente
+prioritario (bool)
 
-llamado_at → datetime
+estado (en_espera, llamado, atendiendo, atendido, ausente)
 
-puesto_id → módulo asignado
+llamado_at
 
-Relaciones
+puesto_id
 
-Un Servicio tiene muchos Tickets
+🔄 Flujo real del sistema
 
-Un Puesto tiene muchos Tickets
+📌 El usuario solicita turno en /kiosco
+→ Se crea un ticket con estado: en_espera
 
-Un Ticket pertenece a un Servicio y (si ya fue llamado) a un Puesto
+🧍‍♂️ El agente abre /puesto
+→ Ve toda la cola completa
+→ Asigna un módulo y llama un turno
 
-🔄 Flujo del sistema
+📡 Al llamar un turno:
 
-Usuario genera turno desde /kiosco
+Se dispara el evento TurnoLlamado
 
-El turno queda en estado en_espera
+Laravel Reverb transmite el evento por WebSocket
 
-En /puesto, el agente:
+La pantalla /pantalla se actualiza en tiempo real
 
-visualiza todos los turnos
+Suena el ding.mp3
 
-elige uno
+🎧 El agente puede:
 
-asigna el módulo
+Comenzar atención
 
-lo llama
+Re-llamar
 
-Se dispara TurnoLlamado
+Marcar ausente
 
-Laravel Reverb manda el evento por WebSocket
+Cerrar turno
 
-En /pantalla:
-
-Se actualiza en vivo
-
-Suena el “ding”
-
-El agente puede:
-
-comenzar → atendiendo
-
-cerrar → atendido
-
-ausente → ausente
-
-re-llamar → vuelve a sonar
-
-⚙️ Instalación y ejecución local
-🟦 1. Clonar el repositorio
+⚙️ Instalación en entorno local
+1. Clonar repo
 git clone https://github.com/Mtz1974/turnero-utn-fsa.git
 cd turnero-utn-fsa
 
-🟦 2. Instalar dependencias de PHP
+2. Instalar dependencias PHP
 composer install
 
-🟦 3. Instalar dependencias de Node
+3. Instalar dependencias JS
 npm install
 
-🟦 4. Configurar el archivo .env
-
-Copiar el archivo:
-
+4. Configurar .env
 cp .env.example .env
 
 
-Configurar estas variables:
+Editar valores principales:
 
 APP_NAME="Turnero En Vivo UTN-FSA"
-APP_ENV=local
 APP_URL=http://127.0.0.1:8000
 
 DB_CONNECTION=sqlite
@@ -191,79 +182,70 @@ VITE_REVERB_PORT="${REVERB_PORT}"
 VITE_REVERB_SCHEME="${REVERB_SCHEME}"
 
 
-Crear el archivo SQLite:
+Crear archivo SQLite:
 
 mkdir -p database
 touch database/database.sqlite
 
-🟦 5. Generar Key + Migrar BD
+5. Generar APP_KEY + Migrar + Seed
 php artisan key:generate
 php artisan migrate --seed
 
+▶️ Ejecutar proyecto (3 terminales)
 
-El seed crea:
+Terminal 1 – Laravel
 
-Servicios
-
-Puestos (Módulos 1–5)
-
-Usuarios de prueba
-
-▶️ Correr el sistema (3 terminales)
-🟩 Terminal 1 – Backend Laravel
 php artisan serve
 
-🟦 Terminal 2 – Vite
+
+Terminal 2 – Vite
+
 npm run dev
 
-🟧 Terminal 3 – WebSocket Reverb
+
+Terminal 3 – Reverb
+
 php artisan reverb:start
 
-🧪 Rutas para pruebas
-Ruta	Función
-/	Welcome informativo
-/kiosco	Generación de turnos
-/puesto	Gestión del agente (requiere login)
-/pantalla	Pantalla TV en tiempo real
-Prueba recomendada
+🧪 Probar todo en el navegador
+Función	URL
+Welcome	http://127.0.0.1:8000/
 
-Abrir /pantalla (dejar abierta)
+Kiosco	http://127.0.0.1:8000/kiosco
 
-Desde /kiosco, generar 2–3 turnos
+Pantalla TV	http://127.0.0.1:8000/pantalla
 
-En /puesto, asignar módulo y llamar
+Panel de Puesto	http://127.0.0.1:8000/puesto
 
-Ver cómo /pantalla actualiza en vivo y suena el ding
+Prueba completa:
 
-🌗 Modo claro / oscuro
+Emitir 2–3 turnos desde /kiosco
 
-✔ Controlado por Alpine
-✔ Guarda preferencia en localStorage
-✔ Soporte completo con clases dark: de Tailwind
+Entrar a /pantalla (dejar abierta)
+
+En /puesto: asignar módulos + llamar → debe sonar el ding.mp3
+
+Ver actualización en tiempo real
+
+🌗 Modo Claro / Oscuro
+
+Toggle implementado con Alpine.js
+
+Tailwind configurado con darkMode: "class"
+
+Persistencia del tema en localStorage
 
 👨‍💻 Autor
 
-Proyecto desarrollado por María Teresa Zamboni,
-para la Tecnicatura Universitaria en Programación – UTN Facultad Regional Formosa.
+Proyecto desarrollado por María Teresa Zamboni
+para la Tecnicatura Universitaria en Programación – UTN FSA.
 
 Incluye:
 
-Migraciones, seeders, modelos correctamente diseñados
+Buenas prácticas de Laravel
 
-WebSockets nativos con Laravel Reverb + Echo
+Eventos broadcast + WebSockets reales
 
-Interfaz moderna con Tailwind + Livewire
+Livewire 3 con acciones reactivas
 
-Flujo completo y funcional de turnos
-
-📌 Listo para presentar
-
-Este README está optimizado para:
-
-Profesores
-
-Corrección académica
-
-Repositorios públicos
-
-Documentación clara
+Interfaz moderna, accesible y responsiva

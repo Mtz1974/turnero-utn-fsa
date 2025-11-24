@@ -183,7 +183,7 @@ php artisan reverb:start
 
 ---
 
-## 👨‍💻 Autora
+## 👨‍💻 Autores
 
 Proyecto desarrollado por:
  **Arce Leonardo Agustin**

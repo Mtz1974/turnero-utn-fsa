@@ -7,6 +7,7 @@ use Livewire\Attributes\Layout;
 use App\Models\Ticket;
 use App\Models\Puesto;
 use Illuminate\Support\Carbon;
+use App\Events\TurnoLlamado; // 👈 IMPORTANTE: evento de broadcast
 
 #[Layout('layouts.app')]
 class PuestoPanel extends Component
@@ -31,11 +32,13 @@ class PuestoPanel extends Component
     /** Refresca turno actual + cola de espera */
     public function refrescarDatos(): void
     {
-        $this->ticketActual = Ticket::whereIn('estado', ['llamado', 'atendiendo'])
+        $this->ticketActual = Ticket::with(['servicio', 'puesto'])
+            ->whereIn('estado', ['llamado', 'atendiendo'])
             ->latest('llamado_at')
             ->first();
 
-        $this->cola = Ticket::where('estado', 'en_espera')
+        $this->cola = Ticket::with('servicio')
+            ->where('estado', 'en_espera')
             ->orderByDesc('prioritario')
             ->orderBy('id')
             ->get();
@@ -57,13 +60,29 @@ class PuestoPanel extends Component
         $ticket->llamado_at = Carbon::now();
         $ticket->save();
 
+        // Cargar relaciones para el payload del evento
+        $ticket->loadMissing(['servicio', 'puesto']);
+
         $this->ticketActual = $ticket;
 
         // Refrescar cola en pantalla
         $this->refrescarDatos();
 
-        // Notificar a /pantalla
+        // Notificar a Livewire (como ya lo hacías)
         $this->dispatch('turno-llamado', id: $ticket->id);
+
+        // 🔊🌐 Notificar por WebSocket (Laravel Reverb + Echo)
+        $codigo = ($ticket->servicio?->codigo ?? '') . str_pad($ticket->numero, 3, '0', STR_PAD_LEFT);
+
+        event(new TurnoLlamado([
+            'id'         => $ticket->id,
+            'codigo'     => $codigo,
+            'estado'     => $ticket->estado,
+            'puesto'     => $ticket->puesto?->id,
+            'puesto_nombre' => $ticket->puesto?->nombre,
+            'prioritario'=> (bool)$ticket->prioritario,
+            'llamado_at' => $ticket->llamado_at?->toIso8601String(),
+        ]));
     }
 
     public function comenzar(): void
@@ -89,7 +108,24 @@ class PuestoPanel extends Component
         $this->ticketActual->llamado_at = Carbon::now();
         $this->ticketActual->save();
 
+        // Livewire browser event
         $this->dispatch('turno-llamado', id: $this->ticketActual->id);
+
+        // También rebroadcast para que la pantalla “escuche” y suene el ding de nuevo
+        $this->ticketActual->loadMissing(['servicio', 'puesto']);
+
+        $codigo = ($this->ticketActual->servicio?->codigo ?? '') .
+            str_pad($this->ticketActual->numero, 3, '0', STR_PAD_LEFT);
+
+        event(new TurnoLlamado([
+            'id'         => $this->ticketActual->id,
+            'codigo'     => $codigo,
+            'estado'     => $this->ticketActual->estado,
+            'puesto'     => $this->ticketActual->puesto?->id,
+            'puesto_nombre' => $this->ticketActual->puesto?->nombre,
+            'prioritario'=> (bool)$this->ticketActual->prioritario,
+            'llamado_at' => $this->ticketActual->llamado_at?->toIso8601String(),
+        ]));
     }
 
     public function cerrar(): void

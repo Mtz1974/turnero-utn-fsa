@@ -185,8 +185,13 @@ php artisan reverb:start
 
 ## 👨‍💻 Autora
 
-Proyecto desarrollado por **María Teresa Zamboni**,  
-como trabajo académico para la **UTN — Facultad Regional Formosa**.
+Proyecto desarrollado por:
+ **Arce Leonardo Agustin**
+ **Fabio Arias,**
+ **Maria Teresa Zamboni,**  
+
+Como trabajo académico para la:
+**UTN — Facultad Regional Formosa**.
 
 ---
 
